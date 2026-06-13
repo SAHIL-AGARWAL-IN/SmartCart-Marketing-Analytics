@@ -2,7 +2,7 @@
 
 An interactive, premium client-side customer segmentation and marketing analytics dashboard. It processes raw customer transaction data, performs feature engineering, and runs K-Means++ clustering and SVD-based Principal Component Analysis (PCA) projection directly in the browser.
 
-![Dashboard Overview](C:\Users\Sahil Agarwal\.gemini\antigravity-ide\brain\15c9a878-d2ba-4a48-b4a7-cea974f0cd9c\dashboard_overview_1781356480988.png)
+![Dashboard Overview](assets/dashboard_overview.png)
 
 ## 🚀 Key Features
 
@@ -59,3 +59,35 @@ To run the application locally, you just need a simple static file server:
         ```
 3.  Open your browser and navigate to:
     `http://localhost:8000/index.html`
+
+---
+
+## 📸 Gallery & Interactive Walkthrough
+
+### 🌓 Theme Customization (Dark vs Light)
+The dashboard defaults to a dark mode layout and transitions into a clean light theme at the click of a button.
+
+| Dark Theme | Light Theme |
+| --- | --- |
+| ![Dashboard Dark](assets/dashboard_overview.png) | ![Dashboard Light](assets/theme_toggled.png) |
+
+### 📊 Segment Profiler & Predictions
+Analyze cluster demographics and classify new users in real time.
+
+| Segment Profiler | Predictive Persona Classifier |
+| --- | --- |
+| ![Segment Profiler](assets/profiler_frugal_families.png) | ![Prediction Result](assets/prediction_result.png) |
+
+### 🗄️ Database & Source Code
+Search, filter, and inspect the raw data or view the Python Jupyter notebook (`smartcart.ipynb`) directly in the app.
+
+| Customer Database | Jupyter Notebook Code Viewer |
+| --- | --- |
+| ![Customer Database](assets/customer_database.png) | ![Notebook Code Viewer](assets/source_code_view.png) |
+
+### 🎬 Interactive Demos (WebP Animations)
+*   **Dashboard Walkthrough (Theme toggling, Persona Profiling & Prediction Form)**:
+    ![Dashboard Verification](assets/dashboard_verification.webp)
+*   **Source Code & About Tabs Navigation**:
+    ![Verify Sidebar Navigation](assets/verify_sidebar_buttons.webp)
+
