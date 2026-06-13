@@ -2,6 +2,10 @@
 
 An interactive, premium client-side customer segmentation and marketing analytics dashboard. It processes raw customer transaction data, performs feature engineering, and runs K-Means++ clustering and SVD-based Principal Component Analysis (PCA) projection directly in the browser.
 
+⚡ **[Live Deployed Application](https://smartcart-marketing-analytics.netlify.app/)** | 📂 **[GitHub Repository](https://github.com/SAHIL-AGARWAL-IN/SmartCart-Marketing-Analytics)**
+
+---
+
 ![Dashboard Overview](assets/dashboard_overview.png)
 
 ## 🚀 Key Features
