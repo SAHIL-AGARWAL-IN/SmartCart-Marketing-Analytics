@@ -159,7 +159,6 @@ function processAndClusterData(k) {
     renderCharts();
     initProfiler();
     filterDatabase();
-    loadNotebook();
     
     document.getElementById('app-loader').style.opacity = '0';
     setTimeout(() => {
@@ -448,7 +447,6 @@ function showSection(sectionId) {
         profiler: 'nav-prof',
         predictor: 'nav-pred',
         database: 'nav-db',
-        'source-code': 'nav-code',
         about: 'nav-about'
     };
     document.getElementById(map[sectionId]).classList.add('active');
@@ -459,7 +457,6 @@ function showSection(sectionId) {
         profiler: { main: "Segment Profiler", sub: "Deep dive profiles of each customer persona" },
         predictor: { main: "Predict Segment", sub: "Classify a new customer into a segment" },
         database: { main: "Customer Database", sub: "Full analytical table of SmartCart customers" },
-        'source-code': { main: "Notebook Source Code", sub: "Jupyter pipeline implementation code" },
         about: { main: "About the Project", sub: "Goal and architecture overview of SmartCart" }
     };
     
@@ -899,87 +896,5 @@ function nextPage() {
     }
 }
 
-// 11. Jupyter Notebook Loader and Renderer
-function loadNotebook() {
-    fetch('smartcart.ipynb')
-        .then(response => response.json())
-        .then(data => {
-            const container = document.getElementById('notebook-container');
-            container.innerHTML = '';
-            
-            data.cells.forEach(cell => {
-                const cellDiv = document.createElement('div');
-                cellDiv.className = `nb-cell nb-${cell.cell_type}-cell`;
-                
-                const sourceText = Array.isArray(cell.source) ? cell.source.join('') : (cell.source || '');
-                
-                if (cell.cell_type === 'markdown') {
-                    const html = parseSimpleMarkdown(sourceText);
-                    cellDiv.innerHTML = `<div class="nb-markdown">${html}</div>`;
-                } else if (cell.cell_type === 'code') {
-                    const codeHtml = escapeHtml(sourceText);
-                    let outputsHtml = '';
-                    
-                    if (cell.outputs && cell.outputs.length > 0) {
-                        cell.outputs.forEach(output => {
-                            if (output.output_type === 'stream' && output.text) {
-                                outputsHtml += `<div class="nb-output-text">${escapeHtml(Array.isArray(output.text) ? output.text.join('') : output.text)}</div>`;
-                            } else if (output.output_type === 'execute_result' && output.data && output.data['text/plain']) {
-                                outputsHtml += `<div class="nb-output-text">${escapeHtml(Array.isArray(output.data['text/plain']) ? output.data['text/plain'].join('') : output.data['text/plain'])}</div>`;
-                            }
-                        });
-                    }
-                    
-                    cellDiv.innerHTML = `
-                        <div class="nb-code-header">In [${cell.execution_count || ' '}]:</div>
-                        <pre class="nb-code-block"><code class="language-python">${codeHtml}</code></pre>
-                        ${outputsHtml ? `<div class="nb-outputs-container">${outputsHtml}</div>` : ''}
-                    `;
-                }
-                container.appendChild(cellDiv);
-            });
-        })
-        .catch(err => {
-            console.error("Error loading notebook:", err);
-            document.getElementById('notebook-container').innerHTML = `<p style="color: var(--danger-color); padding: 1rem;">Failed to load notebook source code.</p>`;
-        });
-}
 
-function parseSimpleMarkdown(md) {
-    let html = md;
-    
-    // Escape HTML first
-    html = escapeHtml(html);
-    
-    // Headers
-    html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
-    html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
-    html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
-    
-    // Bold & Italic
-    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
-    
-    // Inline code
-    html = html.replace(/`(.*?)`/g, '<code>$1</code>');
-    
-    // Lists
-    html = html.replace(/^\s*[\-\*]\s+(.*$)/gim, '<li>$1</li>');
-    // Wrap lists in ul
-    html = html.replace(/(<li>.*<\/li>)/sim, '<ul>$1</ul>');
-    
-    // Line breaks
-    html = html.replace(/\n/g, '<br>');
-    
-    return html;
-}
-
-function escapeHtml(text) {
-    return text
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-}
 
