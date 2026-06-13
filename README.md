@@ -82,9 +82,7 @@ Analyze cluster demographics and classify new users in real time.
 | --- | --- |
 | ![Segment Profiler](assets/profiler_frugal_families.png) | ![Prediction Result](assets/prediction_result.png) |
 
-### 🗄️ Database & Source Code
-Search, filter, and inspect the raw data or view the Python Jupyter notebook (`smartcart.ipynb`) directly in the app.
+### 🗄️ Database View
+Search, filter, and inspect the raw customer data directly in the app.
 
-| Customer Database | Jupyter Notebook Code Viewer |
-| --- | --- |
-| ![Customer Database](assets/customer_database.png) | ![Notebook Code Viewer](assets/source_code_view.png) |
+![Customer Database](assets/customer_database.png)
