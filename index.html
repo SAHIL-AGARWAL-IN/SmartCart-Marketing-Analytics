@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartCart - Customer Segmentation & Insights Dashboard</title>
+    <meta name="description" content="Explore and analyze SmartCart customer database using advanced K-Means clustering and PCA visualization in real time. Profiling segments and predicting customer personas.">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- App Loading Screen -->
+    <div id="app-loader" class="loader-wrapper">
+        <div class="loader"></div>
+        <h2 style="font-family: 'Outfit', sans-serif;">Running K-Means & PCA...</h2>
+        <p style="color: var(--text-secondary);">Preprocessing customer database</p>
+    </div>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <span class="logo-icon">&#128722;</span>
+                <span class="logo-text">SmartCart</span>
+            </div>
+            <nav style="display: flex; flex-direction: column; flex-grow: 1;">
+                <ul class="nav-links">
+                    <li class="nav-item active" id="nav-dash"><a href="#" onclick="showSection('dashboard')">
+                        <span class="nav-icon">&#128202;</span> Dashboard
+                    </a></li>
+                    <li class="nav-item" id="nav-prof"><a href="#" onclick="showSection('profiler')">
+                        <span class="nav-icon">&#128100;</span> Segment Profiler
+                    </a></li>
+                    <li class="nav-item" id="nav-pred"><a href="#" onclick="showSection('predictor')">
+                        <span class="nav-icon">&#129302;</span> Predict Segment
+                    </a></li>
+                    <li class="nav-item" id="nav-db"><a href="#" onclick="showSection('database')">
+                        <span class="nav-icon">&#128248;</span> Database
+                    </a></li>
+                    <li class="nav-item" id="nav-code"><a href="#" onclick="showSection('source-code')">
+                        <span class="nav-icon">&#128187;</span> Source Code
+                    </a></li>
+                </ul>
+                <ul class="nav-links" style="margin-top: auto;">
+                    <li class="nav-item" id="nav-about"><a href="#" onclick="showSection('about')">
+                        <span class="nav-icon">&#9432;</span> About
+                    </a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header Controls -->
+            <header>
+                <div class="header-title">
+                    <h1 id="view-title">Segmentation Dashboard</h1>
+                    <p id="view-subtitle">Overview of SmartCart customer segments</p>
+                </div>
+                <div class="header-controls">
+                    <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle dark/light theme" onclick="toggleTheme()">
+                        <span id="theme-icon">&#9788;</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dashboard View -->
+            <section id="dashboard-view" class="tab-content active">
+                <!-- KPI Widgets -->
+                <div class="kpi-container">
+                    <div class="kpi-card">
+                        <span class="kpi-title">Total Customers</span>
+                        <span id="kpi-total-cust" class="kpi-value">0</span>
+                    </div>
+                    <div class="kpi-card accent">
+                        <span class="kpi-title">Average Income</span>
+                        <span id="kpi-avg-income" class="kpi-value">$0</span>
+                    </div>
+                    <div class="kpi-card warning">
+                        <span class="kpi-title">Average Spending</span>
+                        <span id="kpi-avg-spending" class="kpi-value">$0</span>
+                    </div>
+                    <div class="kpi-card danger">
+                        <span class="kpi-title">Largest Segment</span>
+                        <span id="kpi-largest-segment" class="kpi-value">-</span>
+                    </div>
+                </div>
+
+                <!-- Dashboard Charts Grid -->
+                <div class="dashboard-grid">
+                    <!-- PCA Cluster Plot -->
+                    <div class="card col-8">
+                        <div class="card-title">
+                            <span>PCA Customer Cluster Map</span>
+                            <span class="kpi-title">2D Projection</span>
+                        </div>
+                        <div style="height: 350px; position: relative;">
+                            <canvas id="pcaChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Segment Distribution -->
+                    <div class="card col-4">
+                        <div class="card-title">
+                            <span>Customer Segments</span>
+                            <span class="kpi-title">Distribution</span>
+                        </div>
+                        <div style="height: 350px; position: relative;">
+                            <canvas id="distributionChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Category Spending -->
+                    <div class="card col-6">
+                        <div class="card-title">
+                            <span>Average Category Spending</span>
+                            <span class="kpi-title">By Segment</span>
+                        </div>
+                        <div style="height: 320px; position: relative;">
+                            <canvas id="categorySpendingChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Income vs Spending -->
+                    <div class="card col-6">
+                        <div class="card-title">
+                            <span>Income vs Total Spending</span>
+                            <span class="kpi-title">Scatter</span>
+                        </div>
+                        <div style="height: 320px; position: relative;">
+                            <canvas id="incomeSpendChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Segment Profiler View -->
+            <section id="profiler-view" class="tab-content">
+                <div class="tab-container" id="profiler-tabs">
+                    <button class="tab-btn active" onclick="switchProfilerTab(0)">Segment 1</button>
+                    <button class="tab-btn" onclick="switchProfilerTab(1)">Segment 2</button>
+                    <button class="tab-btn" onclick="switchProfilerTab(2)">Segment 3</button>
+                    <button class="tab-btn" onclick="switchProfilerTab(3)">Segment 4</button>
+                </div>
+                
+                <div id="profiler-content-wrapper">
+                    <!-- Profiler cards will be dynamically injected here -->
+                </div>
+            </section>
+
+            <!-- Predict Segment View -->
+            <section id="predictor-view" class="tab-content">
+                <div class="card col-12">
+                    <div class="card-title">Predict Customer Persona</div>
+                    <form id="prediction-form" onsubmit="predictCustomer(event)">
+                        <h3 style="margin-bottom: 1rem; font-size: 1rem; color: var(--primary-color);">Demographics</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="pred-birth">Year of Birth</label>
+                                <input type="number" id="pred-birth" value="1980" min="1900" max="2026" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="pred-income">Annual Income ($)</label>
+                                <input type="number" id="pred-income" value="50000" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="pred-education">Education</label>
+                                <select id="pred-education">
+                                    <option value="Graduate">Graduate (Bachelor's)</option>
+                                    <option value="Postgraduate">Postgraduate (Master/PhD)</option>
+                                    <option value="Undergraduate">Undergraduate (Basic/2n Cycle)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="pred-marital">Marital Status</label>
+                                <select id="pred-marital">
+                                    <option value="Partner">Living with Partner (Married/Together)</option>
+                                    <option value="Alone">Living Alone (Single/Divorced/Widow)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="pred-kidhome">Kids at Home</label>
+                                <input type="number" id="pred-kidhome" value="0" min="0" max="5">
+                            </div>
+                            <div class="form-group">
+                                <label for="pred-teenhome">Teens at Home</label>
+                                <input type="number" id="pred-teenhome" value="0" min="0" max="5">
+                            </div>
+                        </div>
+
+                        <h3 style="margin-bottom: 1rem; font-size: 1rem; color: var(--primary-color); margin-top: 1.5rem;">Purchase Habits</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="pred-recency">Recency (Days since last purchase)</label>
+                                <input type="number" id="pred-recency" value="30" min="0" max="100">
+                            </div>
+                            <div class="form-group">
+                                <label for="pred-wines">Wines Spend ($)</label>
+                                <input type="number" id="pred-wines" value="100" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="pred-fruits">Fruits Spend ($)</label>
+                                <input type="number" id="pred-fruits" value="20" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="pred-meat">Meat Spend ($)</label>
+                                <input type="number" id="pred-meat" value="50" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="pred-fish">Fish Spend ($)</label>
+                                <input type="number" id="pred-fish" value="20" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="pred-sweets">Sweets Spend ($)</label>
+                                <input type="number" id="pred-sweets" value="10" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="pred-gold">Gold Spend ($)</label>
+                                <input type="number" id="pred-gold" value="20" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="pred-deals">Num Deals Purchased</label>
+                                <input type="number" id="pred-deals" value="1" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="pred-web">Num Web Purchases</label>
+                                <input type="number" id="pred-web" value="3" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="pred-catalog">Num Catalog Purchases</label>
+                                <input type="number" id="pred-catalog" value="2" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="pred-store">Num Store Purchases</label>
+                                <input type="number" id="pred-store" value="4" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="pred-webvisits">Web Visits / Month</label>
+                                <input type="number" id="pred-webvisits" value="5" min="0">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" id="pred-submit-btn" style="width: 100%; justify-content: center; margin-top: 1rem;">
+                            Run Predictive Persona Classifier
+                        </button>
+                    </form>
+
+                    <!-- Prediction Result Box -->
+                    <div id="prediction-result" class="prediction-box" style="display: none;">
+                        <h2 style="font-size: 1.5rem; font-family: Outfit, sans-serif;" id="pred-cluster-title">Predicted Segment: Elite Spenders</h2>
+                        <span class="badge" id="pred-cluster-badge">Cluster 1</span>
+                        <p style="color: var(--text-secondary); max-width: 600px; margin: 0.5rem auto 0 auto;" id="pred-cluster-desc"></p>
+                        <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--panel-border); width: 100%; text-align: left;">
+                            <strong>Marketing Strategy:</strong>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.25rem;" id="pred-cluster-strategy"></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Database View -->
+            <section id="database-view" class="tab-content">
+                <div class="card col-12">
+                    <div class="card-title">
+                        <span>Customer Segmentation Database</span>
+                        <div class="header-controls">
+                            <input type="text" id="db-search" placeholder="Search by ID or Education..." oninput="filterDatabase()" style="padding: 0.5rem 1rem;">
+                            <select id="db-cluster-filter" onchange="filterDatabase()" style="padding: 0.5rem 1rem;">
+                                <option value="all">All Clusters</option>
+                                <option value="0">Cluster 0</option>
+                                <option value="1">Cluster 1</option>
+                                <option value="2">Cluster 2</option>
+                                <option value="3">Cluster 3</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Age</th>
+                                    <th>Education</th>
+                                    <th>Living With</th>
+                                    <th>Income</th>
+                                    <th>Kids/Teens</th>
+                                    <th>Total Spending</th>
+                                    <th>Tenure (Days)</th>
+                                    <th>Assigned Cluster</th>
+                                </tr>
+                            </thead>
+                            <tbody id="database-table-body">
+                                <!-- Table rows will be dynamically injected here -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination Controls -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem;">
+                        <span style="color: var(--text-secondary); font-size: 0.875rem;" id="db-pagination-info">Showing 1 to 15 of 2,236 customers</span>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn btn-primary" onclick="prevPage()" id="btn-prev-page" style="padding: 0.5rem 1rem;">Previous</button>
+                            <button class="btn btn-primary" onclick="nextPage()" id="btn-next-page" style="padding: 0.5rem 1rem;">Next</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Source Code View -->
+            <section id="source-code-view" class="tab-content">
+                <div class="card col-12">
+                    <div class="card-title">
+                        <span>Jupyter Notebook Source Code (smartcart.ipynb)</span>
+                        <span class="kpi-title">Data Preprocessing & Clustering Pipeline</span>
+                    </div>
+                    <div id="notebook-container" style="max-height: 550px; overflow-y: auto; padding-right: 0.5rem; background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--panel-border);">
+                        <p style="color: var(--text-secondary);">Loading notebook source code...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- About View -->
+            <section id="about-view" class="tab-content">
+                <div class="card col-12">
+                    <div class="card-title">About the Project</div>
+                    <div style="line-height: 1.7; color: var(--text-secondary); display: flex; flex-direction: column; gap: 1.5rem;">
+                        <div>
+                            <h2 style="font-family: Outfit, sans-serif; font-size: 1.4rem; color: var(--primary-color); margin-bottom: 0.5rem;">SmartCart Customer Segmentation</h2>
+                            <p>This analytics dashboard processes and segments customer data to define actionable purchase personas. By identifying purchase patterns and demographic traits, the marketing team can implement high-conversion targeted campaigns.</p>
+                        </div>
+                        <div style="border-top: 1px solid var(--panel-border); padding-top: 1.5rem;">
+                            <h3 style="font-family: Outfit, sans-serif; font-size: 1.15rem; color: var(--accent-color); margin-bottom: 0.75rem;">Core Analytics Pipeline</h3>
+                            <ul style="margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem;">
+                                <li><strong>Data Preprocessing:</strong> Handles missing values in annual incomes by filling with median statistics.</li>
+                                <li><strong>Feature Engineering:</strong> Computes customer age, duration of membership tenure, total combined spending across 6 categories, total family size, and one-hot encodes education and marital status.</li>
+                                <li><strong>Feature Scaling:</strong> Normalizes all metrics using z-score standardization to ensure no single variable biases the algorithm.</li>
+                                <li><strong>Principal Component Analysis (PCA):</strong> Projects the 18-dimensional customer profile space onto 2 principal components to enable visual 2D clustering.</li>
+                                <li><strong>K-Means Clustering:</strong> Segments customers into 4 distinct groups (K=4) to distinguish purchasing personas (Elite Spenders, Loyal Spenders, Frugal Families, and Budget Shoppers).</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Chart.js and PapaParse via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
