@@ -1,0 +1,16 @@
+{
+    "name": "SmartCart Customer Segmentation & Insights Dashboard",
+    "short_name": "SmartCart Analytics",
+    "description": "An interactive, client-side customer segmentation and marketing analytics dashboard.",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "background_color": "#09090b",
+    "theme_color": "#1e1b4b",
+    "icons": [
+        {
+            "src": "assets/branding/favicon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml"
+        }
+    ]
+}

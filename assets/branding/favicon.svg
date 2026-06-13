@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1" />
+      <stop offset="100%" stop-color="#a855f7" />
+    </linearGradient>
+  </defs>
+  <!-- Shopping Cart Wheel shadow -->
+  <circle cx="176" cy="432" r="36" fill="#1e1b4b" opacity="0.3" />
+  <circle cx="384" cy="432" r="36" fill="#1e1b4b" opacity="0.3" />
+  <!-- Shopping Cart Wheels -->
+  <circle cx="176" cy="420" r="32" fill="url(#gradient)" />
+  <circle cx="384" cy="420" r="32" fill="url(#gradient)" />
+  <!-- Shopping Cart Handle and Basket Frame -->
+  <path d="M48,80 H112 L160,320 H400 L448,128 H136" fill="none" stroke="url(#gradient)" stroke-width="32" stroke-linecap="round" stroke-linejoin="round" />
+  <!-- Analytics Chart Bars inside the Cart -->
+  <rect x="190" y="180" width="32" height="100" rx="6" fill="url(#gradient)" opacity="0.7"/>
+  <rect x="250" y="140" width="32" height="140" rx="6" fill="url(#gradient)" opacity="0.85"/>
+  <rect x="310" y="100" width="32" height="180" rx="6" fill="url(#gradient)"/>
+  <!-- Trending Line Chart overlay -->
+  <path d="M180,260 L240,190 L300,130 L360,80" fill="none" stroke="#f43f5e" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" />
+  <circle cx="360" cy="80" r="16" fill="#f43f5e" />
+</svg>
