@@ -84,10 +84,3 @@ Search, filter, and inspect the raw data or view the Python Jupyter notebook (`s
 | Customer Database | Jupyter Notebook Code Viewer |
 | --- | --- |
 | ![Customer Database](assets/customer_database.png) | ![Notebook Code Viewer](assets/source_code_view.png) |
-
-### 🎬 Interactive Demos (WebP Animations)
-*   **Dashboard Walkthrough (Theme toggling, Persona Profiling & Prediction Form)**:
-    ![Dashboard Verification](assets/dashboard_verification.webp)
-*   **Source Code & About Tabs Navigation**:
-    ![Verify Sidebar Navigation](assets/verify_sidebar_buttons.webp)
-
