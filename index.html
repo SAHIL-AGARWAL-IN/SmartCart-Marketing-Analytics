@@ -67,9 +67,15 @@
         <p style="color: var(--text-secondary);">Preprocessing customer database</p>
     </div>
 
+    <!-- Sidebar Overlay for mobile -->
+    <div id="sidebar-overlay" class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
     <div class="app-container">
         <!-- Sidebar Navigation -->
         <aside class="sidebar">
+            <button class="sidebar-close-btn" aria-label="Close Sidebar" onclick="toggleSidebar()">
+                <span>&times;</span>
+            </button>
             <div class="logo-container">
                 <span class="logo-icon">&#128722;</span>
                 <span class="logo-text">SmartCart</span>
@@ -102,9 +108,14 @@
         <main class="main-content">
             <!-- Header Controls -->
             <header>
-                <div class="header-title">
-                    <h1 id="view-title">Segmentation Dashboard</h1>
-                    <p id="view-subtitle">Overview of SmartCart customer segments</p>
+                <div class="header-left" style="display: flex; align-items: center; gap: 1rem;">
+                    <button id="sidebar-toggle" class="sidebar-toggle-btn" aria-label="Toggle Navigation Sidebar" onclick="toggleSidebar()">
+                        <span>&#9776;</span>
+                    </button>
+                    <div class="header-title">
+                        <h1 id="view-title">Segmentation Dashboard</h1>
+                        <p id="view-subtitle">Overview of SmartCart customer segments</p>
+                    </div>
                 </div>
                 <div class="header-controls">
                     <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle dark/light theme" onclick="toggleTheme()">

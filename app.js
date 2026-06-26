@@ -462,6 +462,24 @@ function showSection(sectionId) {
     
     document.getElementById('view-title').innerText = titles[sectionId].main;
     document.getElementById('view-subtitle').innerText = titles[sectionId].sub;
+
+    // Auto-close sidebar on mobile/tablet screens when clicking a nav link
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    if (sidebar && sidebar.classList.contains('open')) {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('active');
+    }
+}
+
+// Mobile navigation toggle helper
+function toggleSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    if (sidebar && overlay) {
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('active');
+    }
 }
 
 // 7. Light/Dark Theme toggle

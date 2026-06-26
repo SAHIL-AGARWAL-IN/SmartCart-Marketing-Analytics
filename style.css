@@ -287,14 +287,96 @@ header {
 .col-8 { grid-column: span 8; }
 .col-6 { grid-column: span 6; }
 .col-4 { grid-column: span 4; }
+/* Mobile Sidebar Toggle Controls styling */
+.sidebar-toggle-btn {
+    display: none;
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    color: var(--text-primary);
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--card-shadow);
+    transition: var(--transition);
+    font-size: 1.25rem;
+    padding: 0;
+}
+
+.sidebar-toggle-btn:hover {
+    transform: scale(1.05);
+    border-color: var(--primary-color);
+}
+
+.sidebar-close-btn {
+    display: none;
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.8rem;
+    cursor: pointer;
+    transition: var(--transition);
+    line-height: 1;
+}
+
+.sidebar-close-btn:hover {
+    color: var(--text-primary);
+    transform: scale(1.1);
+}
+
+/* Sidebar overlay backdrop style */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 9;
+    transition: var(--transition);
+}
+
+.sidebar-overlay.active {
+    display: block;
+}
 
 @media (max-width: 1024px) {
     .col-8, .col-4 { grid-column: span 12; }
+    
+    .sidebar {
+        transform: translateX(-100%);
+        box-shadow: none;
+    }
+    
+    .sidebar.open {
+        transform: translateX(0);
+        box-shadow: var(--card-shadow);
+    }
+    
+    .main-content {
+        margin-left: 0;
+        padding: 1.5rem;
+    }
+    
+    .sidebar-toggle-btn {
+        display: flex;
+    }
+    
+    .sidebar-close-btn {
+        display: block;
+    }
 }
+
 @media (max-width: 768px) {
     .col-6 { grid-column: span 12; }
-    .sidebar { width: 0; padding: 0; overflow: hidden; border-right: none; }
-    .main-content { margin-left: 0; }
 }
 
 /* Interactive elements */
